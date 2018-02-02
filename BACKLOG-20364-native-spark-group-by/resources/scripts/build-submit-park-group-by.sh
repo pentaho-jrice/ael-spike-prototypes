@@ -1,0 +1,1 @@
+./build-spark-group-by.sh && ./submit-spark-group-by.sh

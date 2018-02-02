@@ -5,7 +5,7 @@ import org.apache.spark.sql.SparkSession;
 
 public class SparkTestExample {
   public static void main(String[] args) {
-    String logFile = "sales_data.csv"; // Should be some file on your system
+    String logFile = "../ktrs/files/sales_data.csv"; // Should be some file on your system
     SparkSession spark = SparkSession.builder().appName("Simple Application").getOrCreate();
     Dataset<String> logData = spark.read().textFile(logFile).cache();
 

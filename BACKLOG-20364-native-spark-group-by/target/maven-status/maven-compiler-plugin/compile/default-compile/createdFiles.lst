@@ -1,2 +1,3 @@
-com\pentaho\adaptiveexecution\prototype\nativesparkgroupby\SparkTestExample.class
-com\pentaho\adaptiveexecution\prototype\nativesparkgroupby\SparkGroupByRdd.class
+com/pentaho/adaptiveexecution/prototype/nativesparkgroupby/SalesDataModel.class
+com/pentaho/adaptiveexecution/prototype/nativesparkgroupby/SparkGroupBySql.class
+com/pentaho/adaptiveexecution/prototype/nativesparkgroupby/SparkTestExample.class
