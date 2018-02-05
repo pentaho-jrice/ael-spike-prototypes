@@ -48,7 +48,9 @@ public class SparkGroupBySql {
     //    rdd_records.foreach( a -> System.out.println(a.getCity() + " - " + a.getState()));
 
     // Transform the sales data JavaRDD to Spark SQL Dataframe (Dataset)
-    Dataset<Row> salesDataDataFrame = spark.createDataFrame( salesDataJavaRdd, SalesDataModel.class );
+    Dataset<Row> salesDataDataFrame = spark
+            .createDataFrame( salesDataJavaRdd, SalesDataModel.class )
+            .sort( "city", "state" );
 
     // Show the schema of the sales data Dataframe - validate it is working.  Should see the schema definition and
     // sample rows from the csv
@@ -64,6 +66,8 @@ public class SparkGroupBySql {
     // ---------------------------------------------------------------------------------------------
 
     executeSumOperation( spark, "Sum" );
+
+    executeSumOperationAllRows( spark, "Sum - All Rows");
 
     executeAverageOperation( spark, "Average (Mean)" );
 
@@ -105,8 +109,31 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, sum(priceEach)"
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state" );
+        + " group by city, state" );
+
+    // show the results of the query.
+    groupDf.show();
+
+    logOperationEnd( aggregationType, stopWatch );
+  }
+
+  private static void executeSumOperationAllRows( SparkSession spark, String aggregationType ) {
+    StopWatch stopWatch = logOperationStart( aggregationType );
+
+    // run Spark SQL Group By query against the sales data table
+    Dataset<Row> groupDf = spark.sql(
+            "SELECT A.city, " +
+                    "      A.state, " +
+                    "      b.sumPrice" +
+                    " FROM salesdata A" +
+                    "      LEFT OUTER JOIN ( SELECT city, " +
+                    "                               state, " +
+                    "                               sum(priceEach) sumPrice" +
+                    "                          FROM salesdata B" +
+                    "                      GROUP BY city, state) B "
+                    + "    ON  A.city = B.city AND" +
+                    "          A.state = B.state" +
+                    " ORDER BY 1, 2 ");
 
     // show the results of the query.
     groupDf.show();
@@ -121,8 +148,7 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, avg(priceEach) "
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state" );
+        + " group by city, state" );
 
     // show the results of the query.
     groupDf.show();
@@ -137,8 +163,7 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, percentile_approx(priceEach, 0.5) "
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state" );
+        + " group by city, state" );
 
     // show the results of the query.
     groupDf.show();
@@ -156,8 +181,7 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, percentile_approx(priceEach, " + percentileVal + ") "
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state" );
+        + " group by city, state" );
 
     // show the results of the query.
     groupDf.show();
@@ -172,8 +196,7 @@ public class SparkGroupBySql {
         Dataset<Row> groupDf = spark.sql(
           "SELECT city, state, min(priceEach) "
             + " FROM salesdata"
-            + " group by city, state"
-            + " order by city, state");
+            + " group by city, state" );
 
         // show the results of the query.
         groupDf.show();
@@ -188,8 +211,7 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, max(priceEach) "
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state");
+        + " group by city, state" );
 
     // show the results of the query.
     groupDf.show();
@@ -204,8 +226,7 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, count(priceEach) "
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state");
+        + " group by city, state" );
 
     // show the results of the query.
     groupDf.show();
@@ -222,8 +243,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -240,8 +260,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -258,8 +277,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -276,8 +294,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -294,8 +311,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -312,8 +328,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -330,8 +345,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -346,8 +360,7 @@ public class SparkGroupBySql {
     Dataset<Row> groupDf = spark.sql(
       "SELECT city, state, stddev(priceEach) "
         + " FROM salesdata"
-        + " group by city, state"
-        + " order by city, state");
+        + " group by city, state" );
 
     // show the results of the query.
     groupDf.show();
@@ -364,8 +377,7 @@ public class SparkGroupBySql {
     //    Dataset<Row> groupDf = spark.sql(
     //      "SELECT city, state, sum(priceEach), avg(priceEach), stddev(priceEach) "
     //        + " FROM salesdata"
-    //        + " group by city, state"
-    //        + " order by city, state");
+    //        + " group by city, state" );
     //
     //    // show the results of the query.
     //    groupDf.show();
@@ -380,8 +392,7 @@ public class SparkGroupBySql {
         Dataset<Row> groupDf = spark.sql(
           "SELECT city, state, count(distinct priceEach) "
             + " FROM salesdata"
-            + " group by city, state"
-            + " order by city, state");
+            + " group by city, state" );
 
         // show the results of the query.
         groupDf.show();
