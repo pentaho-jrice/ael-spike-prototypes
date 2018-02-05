@@ -1,1 +1,1 @@
-./build-spark-group-by.sh && ./submit-spark-group-by.sh
+./build-spark-unique-row.sh && ./submit-spark-uniqe-row.sh
