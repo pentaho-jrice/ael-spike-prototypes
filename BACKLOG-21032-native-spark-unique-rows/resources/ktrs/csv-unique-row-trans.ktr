@@ -444,7 +444,7 @@
     </hop>
     <hop>
       <from>Sort rows 2</from>
-      <to>Group by 2</to>
+      <to>Unique rows</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -459,7 +459,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\jrice\OneDrive - Pentaho Corp\dev-env\sandbox\BACKLOG-20364 - native spark group by\files\sales_data.csv</filename>
+    <filename>${Internal.Entry.Current.Directory}/files/sales_data - simple.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -752,96 +752,6 @@
     </GUI>
   </step>
   <step>
-    <name>Group by 2</name>
-    <type>GroupBy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <all_rows>Y</all_rows>
-    <ignore_aggregate>N</ignore_aggregate>
-    <field_ignore/>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>grp</prefix>
-    <add_linenr>Y</add_linenr>
-    <linenr_fieldname>lineno</linenr_fieldname>
-    <give_back_row>N</give_back_row>
-    <group>
-      <field>
-        <name>CITY</name>
-      </field>
-      <field>
-        <name>STATE</name>
-      </field>
-    </group>
-    <fields>
-      <field>
-        <aggregate>avg-price</aggregate>
-        <subject>PRICEEACH</subject>
-        <type>AVERAGE</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>total-price</aggregate>
-        <subject>PRICEEACH</subject>
-        <type>SUM</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>avg-sales</aggregate>
-        <subject>SALES</subject>
-        <type>AVERAGE</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>total-sales</aggregate>
-        <subject>SALES</subject>
-        <type>SUM</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>50 pctl-price</aggregate>
-        <subject>PRICEEACH</subject>
-        <type>PERCENTILE</type>
-        <valuefield>50</valuefield>
-      </field>
-      <field>
-        <aggregate>median-dev-price</aggregate>
-        <subject>PRICEEACH</subject>
-        <type>MEDIAN</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>min-order</aggregate>
-        <subject>QUANTITYORDERED</subject>
-        <type>MIN</type>
-        <valuefield/>
-      </field>
-      <field>
-        <aggregate>max-order</aggregate>
-        <subject>ORDERLINENUMBER</subject>
-        <type>MAX</type>
-        <valuefield/>
-      </field>
-    </fields>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>96</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Sort rows 2</name>
     <type>SortRows</type>
     <description/>
@@ -886,6 +796,44 @@
     </remotesteps>
     <GUI>
       <xloc>288</xloc>
+      <yloc>96</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Unique rows</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <count_rows>Y</count_rows>
+    <count_field>count</count_field>
+    <reject_duplicate_row>N</reject_duplicate_row>
+    <error_description/>
+    <fields>
+      <field>
+        <name>CITY</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+      <field>
+        <name>CITY</name>
+        <case_insensitive>N</case_insensitive>
+      </field>
+    </fields>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>480</xloc>
       <yloc>96</yloc>
       <draw>Y</draw>
     </GUI>

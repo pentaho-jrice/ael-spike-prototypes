@@ -39,21 +39,17 @@ public class SalesDataModel implements Serializable {
                          String status, String qtr_id, String city, String state, String postalCode,
                          String country ) {
 
-    try {
-      this.orderNumber = orderNumber;
-      this.quantityOrdered = Integer.valueOf( quantityOrdered );
-      this.priceEach = Double.valueOf( priceEach );
-      this.orderLineNumber = Integer.valueOf( orderLineNumber );
-      this.sale = Double.valueOf( sale );
-      this.status = status;
-      this.qtr_id = Integer.valueOf( qtr_id );
-      this.city = city;
-      this.state = state;
-      this.postalCode = postalCode;
-      this.country = country;
-    } catch (Exception e ) {
-      System.out.println(" error:  " + e.getClass().getName() + " - " + e.getMessage());
-    }
+    this.orderNumber = orderNumber;
+    this.quantityOrdered = Integer.valueOf( quantityOrdered );
+    this.priceEach = Double.valueOf( priceEach );
+    this.orderLineNumber = Integer.valueOf( orderLineNumber );
+    this.sale = Double.valueOf( sale );
+    this.status = status;
+    this.qtr_id = Integer.valueOf( qtr_id );
+    this.city = city;
+    this.state = state;
+    this.postalCode = postalCode;
+    this.country = country;
   }
 
   public String getOrderNumber() {
